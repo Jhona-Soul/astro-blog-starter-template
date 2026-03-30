@@ -1,0 +1,125 @@
+---
+import { Image } from 'astro:assets';
+import experiencia from '../assets/experiencia.png';
+import cintatransportadora from '../assets/cinta-transportadora.png';
+import solucion from '../assets/solucion.png';
+import apoyo from '../assets/apoyo.png';
+import "../styles/WhyChoose.css";
+---
+
+<!-- FIX: py-13 no existe en Tailwind → reemplazado por py-12 (valor válido más cercano) -->
+<section id="elegirnos" class="relative overflow-hidden bg-[#05070b] py-12 text-white scroll-mt-28">
+  <!-- franjas / luces del fondo: sin cambios -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#07182d] to-transparent opacity-70"></div>
+    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#07182d] to-transparent opacity-70"></div>
+
+    <div class="absolute left-[10%] top-[20%] h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl"></div>
+    <div class="absolute right-[15%] top-[25%] h-72 w-72 rounded-full bg-blue-500/10 blur-3xl"></div>
+  </div>
+
+  <div class="mx-auto max-w-6xl px-6">
+    <!-- Título -->
+    <div class="mb-10">
+      <span>
+        <!-- FIX: text-6xl base (60px) en mobile → demasiado grande; ahora escala progresiva.
+             En lg:text-7xl conserva exactamente la vista desktop original. -->
+        <h2 class="relative z-10 text-4xl font-extrabold tracking-tight text-zinc-300 sm:text-5xl md:text-6xl lg:text-7xl">
+          Por qué elegirnos?
+        </h2>
+      </span>
+    </div>
+
+    <!--
+      FIX: md:grid-cols-4 activaba a 768px (tablet) con row-span/col-span complejos → 4 columnas
+      en tablet estrecho aplasta las cards y rompe el layout.
+      Solución: 1 columna en mobile, 2 columnas en sm/md (tablet), 4 columnas solo en lg+ (desktop).
+      Los col-span y row-span complejos se aplican solo en lg para no afectar desktop.
+    -->
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- card grande izquierda: col-span-1 row-span-2 solo en lg -->
+      <article class="feature-card lg:col-span-1 lg:row-span-2">
+        <div class="icon-glow cyan"></div>
+        <div class="relative z-10">
+          <div class="mb-5">
+            <Image
+              src={cintatransportadora}
+              alt="Escalable"
+              width={180}
+              height={180}
+              class="object-contain"
+            />
+          </div>
+          <p class="text-xl leading-relaxed text-zinc-300">
+            <span class="font-semibold text-cyan-400">Escalable:</span>
+            empezamos por una máquina y podemos crecer a toda la planta
+          </p>
+        </div>
+      </article>
+
+      <!-- card centro arriba: col-span-2 solo en lg -->
+      <article class="feature-card lg:col-span-2">
+        <div class="icon-glow orange"></div>
+        <div class="relative z-10 flex items-center gap-4">
+          <div class="text-orange-400 shrink-0">
+            <Image
+              src={experiencia}
+              alt="Experiencia en PLC"
+              width={100}
+              height={100}
+              class="object-contain"
+            />
+          </div>
+          <p class="text-xl leading-relaxed text-zinc-300 lg:text-2xl">
+            <span class="font-semibold text-orange-400">
+              Experiencia en PLC,
+            </span>
+            variadores y servomotores
+          </p>
+        </div>
+      </article>
+
+      <!-- card centro abajo: col-span-2 solo en lg -->
+      <article class="feature-card lg:col-span-2">
+        <div class="icon-glow purple"></div>
+        <div class="relative z-10 flex items-center gap-4">
+          <div class="text-violet-400 shrink-0">
+            <Image
+              src={apoyo}
+              alt="Acompañamiento técnico"
+              width={100}
+              height={100}
+              class="object-contain"
+            />
+          </div>
+          <p class="text-xl leading-relaxed text-zinc-300 lg:text-2xl">
+            <span class="font-semibold text-violet-400">
+              Acompañamiento técnico
+            </span>
+            y soporte remoto
+          </p>
+        </div>
+      </article>
+
+      <!-- card grande derecha: col-start-4 row-span-2 solo en lg -->
+      <article class="feature-card lg:col-start-4 lg:row-start-1 lg:row-span-2">
+        <div class="icon-glow green"></div>
+        <div class="relative z-10">
+          <div class="mb-5">
+            <Image
+              src={solucion}
+              alt="Apoyo"
+              width={180}
+              height={180}
+              class="object-contain"
+            />
+          </div>
+          <p class="text-xl leading-relaxed text-zinc-300">
+            <span class="font-semibold text-emerald-400">Soluciones</span>
+            a medida, no productos genericos
+          </p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

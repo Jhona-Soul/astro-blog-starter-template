@@ -1,0 +1,628 @@
+---
+const tabs = [
+  { id: 'usuarios', label: 'Usuarios creados' },
+  { id: 'alarmas', label: 'Alarmas' },
+  { id: 'reglas', label: 'Reglas de reportes' },
+  { id: 'tags', label: 'Tags PLC' },
+];
+
+const itemsByTab = {
+  alarmas: [
+    {
+      title: 'Alta temperatura tanque L1',
+      subtitle: 'Última actualización hace 2 min | Creado 26/12/2025',
+      badge: 'Crítica',
+      badgeTone: 'danger',
+      meta: 'Evento activo - Línea 1',
+      updatedAt: '2025-12-26T10:21:00',
+    },
+    {
+      title: 'Baja velocidad motor L2',
+      subtitle: 'Última actualización hace 5 min | Creado 26/12/2025',
+      badge: 'Advertencia',
+      badgeTone: 'warning',
+      meta: 'Desvío detectado - Motor principal',
+      updatedAt: '2025-12-26T09:58:00',
+    },
+    {
+      title: 'Falla sensor presión L1',
+      subtitle: 'Última actualización hace 8 min | Creado 26/12/2025',
+      badge: 'Info',
+      badgeTone: 'info',
+      meta: 'Lectura intermitente - Sensor P-101',
+      updatedAt: '2025-12-26T09:35:00',
+    },
+    {
+      title: 'Fotocélula bloqueada línea 3',
+      subtitle: 'Última actualización hace 11 min | Creado 26/12/2025',
+      badge: 'Advertencia',
+      badgeTone: 'warning',
+      meta: 'Ingreso de cajas detenido',
+      updatedAt: '2025-12-26T09:22:00',
+    },
+    {
+      title: 'Desvío de posición robot R1',
+      subtitle: 'Última actualización hace 15 min | Creado 26/12/2025',
+      badge: 'Advertencia',
+      badgeTone: 'warning',
+      meta: 'Paletizado fuera de tolerancia',
+      updatedAt: '2025-12-26T09:10:00',
+    },
+    {
+      title: 'Pérdida de comunicación PLC L2',
+      subtitle: 'Última actualización hace 18 min | Creado 26/12/2025',
+      badge: 'Crítica',
+      badgeTone: 'danger',
+      meta: 'Timeout de comunicación industrial',
+      updatedAt: '2025-12-26T09:01:00',
+    },
+    {
+      title: 'Baja presión neumática celda A',
+      subtitle: 'Última actualización hace 22 min | Creado 26/12/2025',
+      badge: 'Advertencia',
+      badgeTone: 'warning',
+      meta: 'Compresor por debajo del mínimo',
+      updatedAt: '2025-12-26T08:52:00',
+    },
+    {
+      title: 'Sobrecarga cinta transportadora C2',
+      subtitle: 'Última actualización hace 29 min | Creado 26/12/2025',
+      badge: 'Crítica',
+      badgeTone: 'danger',
+      meta: 'Corriente elevada en motor',
+      updatedAt: '2025-12-26T08:45:00',
+    },
+    {
+      title: 'Rechazo acumulado fuera de rango',
+      subtitle: 'Última actualización hace 35 min | Creado 26/12/2025',
+      badge: 'Info',
+      badgeTone: 'info',
+      meta: 'Conteo de rechazo en aumento',
+      updatedAt: '2025-12-26T08:32:00',
+    },
+    {
+      title: 'Parada por E-Stop celda palletizado',
+      subtitle: 'Última actualización hace 42 min | Creado 26/12/2025',
+      badge: 'Crítica',
+      badgeTone: 'danger',
+      meta: 'Botón de emergencia activado',
+      updatedAt: '2025-12-26T08:20:00',
+    },
+  ],
+
+  usuarios: [
+    {
+      title: 'Juan Pérez',
+      subtitle: 'Última actualización hace 1 día | Creado 10/12/2025',
+      badge: 'Administrador',
+      badgeTone: 'neutral',
+      meta: 'juan.perez@empresa.com',
+      updatedAt: '2025-12-25T16:10:00',
+    },
+    {
+      title: 'María Gómez',
+      subtitle: 'Última actualización hace 3 días | Creado 08/12/2025',
+      badge: 'Supervisor',
+      badgeTone: 'neutral',
+      meta: 'maria.gomez@empresa.com',
+      updatedAt: '2025-12-23T11:40:00',
+    },
+    {
+      title: 'Carlos Díaz',
+      subtitle: 'Última actualización hace 5 días | Creado 05/12/2025',
+      badge: 'Operador',
+      badgeTone: 'neutral',
+      meta: 'carlos.diaz@empresa.com',
+      updatedAt: '2025-12-21T09:20:00',
+    },
+    {
+      title: 'Lucía Fernández',
+      subtitle: 'Última actualización hace 6 días | Creado 04/12/2025',
+      badge: 'Supervisor',
+      badgeTone: 'neutral',
+      meta: 'lucia.fernandez@empresa.com',
+      updatedAt: '2025-12-20T18:10:00',
+    },
+    {
+      title: 'Matías Sosa',
+      subtitle: 'Última actualización hace 7 días | Creado 03/12/2025',
+      badge: 'Operador',
+      badgeTone: 'neutral',
+      meta: 'matias.sosa@empresa.com',
+      updatedAt: '2025-12-19T14:25:00',
+    },
+    {
+      title: 'Paula Rivas',
+      subtitle: 'Última actualización hace 8 días | Creado 02/12/2025',
+      badge: 'Administrador',
+      badgeTone: 'neutral',
+      meta: 'paula.rivas@empresa.com',
+      updatedAt: '2025-12-18T10:35:00',
+    },
+    {
+      title: 'Nicolás Herrera',
+      subtitle: 'Última actualización hace 9 días | Creado 01/12/2025',
+      badge: 'Mantenimiento',
+      badgeTone: 'neutral',
+      meta: 'nicolas.herrera@empresa.com',
+      updatedAt: '2025-12-17T09:10:00',
+    },
+    {
+      title: 'Sofía López',
+      subtitle: 'Última actualización hace 10 días | Creado 30/11/2025',
+      badge: 'Calidad',
+      badgeTone: 'neutral',
+      meta: 'sofia.lopez@empresa.com',
+      updatedAt: '2025-12-16T08:00:00',
+    },
+    {
+      title: 'Leandro Ruiz',
+      subtitle: 'Última actualización hace 11 días | Creado 29/11/2025',
+      badge: 'Ingeniería',
+      badgeTone: 'neutral',
+      meta: 'leandro.ruiz@empresa.com',
+      updatedAt: '2025-12-15T15:40:00',
+    },
+    {
+      title: 'Erika Molina',
+      subtitle: 'Última actualización hace 12 días | Creado 28/11/2025',
+      badge: 'Operador',
+      badgeTone: 'neutral',
+      meta: 'erika.molina@empresa.com',
+      updatedAt: '2025-12-14T12:20:00',
+    },
+  ],
+
+  reglas: [
+    {
+      title: 'Reporte diario de productividad - Línea 1',
+      subtitle: 'Última actualización hace 4 h | Creado 20/12/2025',
+      badge: 'Diario',
+      badgeTone: 'success',
+      meta: 'Envío 07:00 | produccion@empresa.com',
+      updatedAt: '2025-12-26T06:50:00',
+    },
+    {
+      title: 'Reporte semanal de OEE - Planta completa',
+      subtitle: 'Última actualización hace 1 día | Creado 15/12/2025',
+      badge: 'Semanal',
+      badgeTone: 'success',
+      meta: 'Lunes 08:00 | gerencia@empresa.com',
+      updatedAt: '2025-12-25T08:00:00',
+    },
+    {
+      title: 'Resumen fin de turno - Palletizado',
+      subtitle: 'Última actualización hace 2 días | Creado 18/12/2025',
+      badge: 'Turno',
+      badgeTone: 'success',
+      meta: 'Fin de turno | mantenimiento@empresa.com',
+      updatedAt: '2025-12-24T18:15:00',
+    },
+    {
+      title: 'Reporte scrap diario - Envasado',
+      subtitle: 'Última actualización hace 2 días | Creado 17/12/2025',
+      badge: 'Diario',
+      badgeTone: 'success',
+      meta: 'Envío 18:00 | calidad@empresa.com',
+      updatedAt: '2025-12-24T17:00:00',
+    },
+    {
+      title: 'Indicadores de paradas no programadas',
+      subtitle: 'Última actualización hace 3 días | Creado 16/12/2025',
+      badge: 'Diario',
+      badgeTone: 'success',
+      meta: 'Envío 19:00 | jefatura@empresa.com',
+      updatedAt: '2025-12-23T19:00:00',
+    },
+    {
+      title: 'Reporte horario de cajas procesadas',
+      subtitle: 'Última actualización hace 3 días | Creado 14/12/2025',
+      badge: 'Horario',
+      badgeTone: 'success',
+      meta: 'Cada 1 h | supervisores@empresa.com',
+      updatedAt: '2025-12-23T13:00:00',
+    },
+    {
+      title: 'Resumen diario de alarmas activas',
+      subtitle: 'Última actualización hace 4 días | Creado 13/12/2025',
+      badge: 'Diario',
+      badgeTone: 'success',
+      meta: 'Envío 06:30 | mantenimiento@empresa.com',
+      updatedAt: '2025-12-22T06:30:00',
+    },
+    {
+      title: 'Comparativo semanal por línea',
+      subtitle: 'Última actualización hace 5 días | Creado 12/12/2025',
+      badge: 'Semanal',
+      badgeTone: 'success',
+      meta: 'Viernes 17:00 | direccion@empresa.com',
+      updatedAt: '2025-12-21T17:00:00',
+    },
+    {
+      title: 'Desvíos de temperatura por lote',
+      subtitle: 'Última actualización hace 6 días | Creado 11/12/2025',
+      badge: 'Por evento',
+      badgeTone: 'success',
+      meta: 'Al detectar desvío | calidad@empresa.com',
+      updatedAt: '2025-12-20T09:30:00',
+    },
+    {
+      title: 'Reporte de disponibilidad de equipos',
+      subtitle: 'Última actualización hace 7 días | Creado 10/12/2025',
+      badge: 'Diario',
+      badgeTone: 'success',
+      meta: 'Envío 22:00 | ingenieria@empresa.com',
+      updatedAt: '2025-12-19T22:00:00',
+    },
+  ],
+
+  tags: [
+    {
+      title: 'PLC_L1_TEMP_TANQUE',
+      subtitle: 'Última actualización hace 12 min | Creado 01/12/2025',
+      badge: 'REAL',
+      badgeTone: 'info',
+      meta: 'Temperatura tanque línea 1',
+      updatedAt: '2025-12-26T10:12:00',
+    },
+    {
+      title: 'PLC_L2_VEL_CINTA',
+      subtitle: 'Última actualización hace 20 min | Creado 01/12/2025',
+      badge: 'REAL',
+      badgeTone: 'info',
+      meta: 'Velocidad de cinta línea 2',
+      updatedAt: '2025-12-26T10:04:00',
+    },
+    {
+      title: 'PLC_R1_CAJA_SENSOR',
+      subtitle: 'Última actualización hace 35 min | Creado 02/12/2025',
+      badge: 'BOOL',
+      badgeTone: 'warning',
+      meta: 'Estado de caja bajo sensor robot 1',
+      updatedAt: '2025-12-26T09:49:00',
+    },
+    {
+      title: 'PLC_L3_CONTADOR_CAJAS',
+      subtitle: 'Última actualización hace 41 min | Creado 02/12/2025',
+      badge: 'DINT',
+      badgeTone: 'warning',
+      meta: 'Conteo acumulado de cajas línea 3',
+      updatedAt: '2025-12-26T09:40:00',
+    },
+    {
+      title: 'PLC_L1_PRESION_AIRE',
+      subtitle: 'Última actualización hace 49 min | Creado 03/12/2025',
+      badge: 'REAL',
+      badgeTone: 'info',
+      meta: 'Presión de aire celda palletizado',
+      updatedAt: '2025-12-26T09:31:00',
+    },
+    {
+      title: 'PLC_R2_POSICION_EJE_X',
+      subtitle: 'Última actualización hace 1 h | Creado 03/12/2025',
+      badge: 'REAL',
+      badgeTone: 'info',
+      meta: 'Posición actual robot eje X',
+      updatedAt: '2025-12-26T09:15:00',
+    },
+    {
+      title: 'PLC_R2_POSICION_EJE_Y',
+      subtitle: 'Última actualización hace 1 h | Creado 03/12/2025',
+      badge: 'REAL',
+      badgeTone: 'info',
+      meta: 'Posición actual robot eje Y',
+      updatedAt: '2025-12-26T09:10:00',
+    },
+    {
+      title: 'PLC_R2_POSICION_EJE_Z',
+      subtitle: 'Última actualización hace 1 h | Creado 03/12/2025',
+      badge: 'REAL',
+      badgeTone: 'info',
+      meta: 'Posición actual robot eje Z',
+      updatedAt: '2025-12-26T09:05:00',
+    },
+    {
+      title: 'PLC_L2_FOTOCELDA_ENTRADA',
+      subtitle: 'Última actualización hace 1 h | Creado 04/12/2025',
+      badge: 'BOOL',
+      badgeTone: 'warning',
+      meta: 'Fotocélula de entrada línea 2',
+      updatedAt: '2025-12-26T08:59:00',
+    },
+    {
+      title: 'PLC_L1_LOTE_ACTIVO',
+      subtitle: 'Última actualización hace 2 h | Creado 04/12/2025',
+      badge: 'STRING',
+      badgeTone: 'neutral',
+      meta: 'Código de lote actualmente procesado',
+      updatedAt: '2025-12-26T08:20:00',
+    },
+  ],
+};
+---
+<section class="section-container py-10">
+  <div
+    id="listados-panel-root"
+    class="rounded-[20px] border border-white/10 bg-[#05070b] p-6 text-white shadow-[0_12px_40px_rgba(0,0,0,0.28)]"
+  >
+    <div class="flex flex-wrap items-center gap-8 border-b border-white/5 pb-4">
+      {tabs.map((tab, index) => (
+        <button
+          type="button"
+          class:list={['panel-tab', index === 0 && 'active']}
+          data-tab={tab.id}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+
+    <div class="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-end">
+      <div class="relative w-full max-w-[320px]">
+        <input
+          id="panel-search"
+          type="text"
+          placeholder="Search"
+          class="w-full rounded-[8px] border border-white/10 bg-transparent px-10 py-3 text-sm text-white outline-none placeholder:text-slate-500"
+        />
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m0 0A7.5 7.5 0 1 0 5.5 5.5a7.5 7.5 0 0 0 11.15 11.15Z" />
+          </svg>
+        </span>
+      </div>
+
+      <select
+        id="panel-sort"
+        class="rounded-[8px] border border-white/10 bg-transparent px-4 py-3 text-sm text-white outline-none"
+      >
+        <option value="recent" class="bg-[#111]">Sort by last updated</option>
+        <option value="az" class="bg-[#111]">Ordenar A-Z</option>
+      </select>
+    </div>
+
+    <div id="panel-list" class="mt-4 space-y-3"></div>
+
+    <div class="mt-8 flex flex-col gap-3 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-end">
+      <span id="panel-total">Total 0</span>
+
+      <div class="flex items-center gap-3">
+        <button
+          id="panel-prev"
+          type="button"
+          class="text-slate-500 transition hover:text-white"
+        >
+          ‹
+        </button>
+
+        <span
+          id="panel-page"
+          class="inline-flex min-w-[36px] h-8 items-center justify-center rounded-[6px] border border-cyan-400 px-3 text-cyan-400"
+        >
+          1
+        </span>
+
+        <button
+          id="panel-next"
+          type="button"
+          class="text-slate-500 transition hover:text-white"
+        >
+          ›
+        </button>
+      </div>
+
+      <select
+        id="panel-per-page"
+        class="rounded-[8px] border border-white/10 bg-transparent px-3 py-2 text-sm text-white outline-none"
+      >
+        <option value="5" class="bg-[#111]" selected>5/page</option>
+        <option value="10" class="bg-[#111]">10/page</option>
+        <option value="20" class="bg-[#111]">20/page</option>
+      </select>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ itemsByTab }}>
+  const root = document.getElementById('listados-panel-root');
+
+  if (!root) {
+    throw new Error('No se encontró el contenedor del panel de listados');
+  }
+
+  const tabButtons = root.querySelectorAll('[data-tab]');
+  const listEl = root.querySelector('#panel-list');
+  const totalEl = root.querySelector('#panel-total');
+  const pageEl = root.querySelector('#panel-page');
+  const searchEl = root.querySelector('#panel-search');
+  const sortEl = root.querySelector('#panel-sort');
+  const prevBtn = root.querySelector('#panel-prev');
+  const nextBtn = root.querySelector('#panel-next');
+  const perPageEl = root.querySelector('#panel-per-page');
+
+  let activeTab = 'alarmas';
+  let currentPage = 1;
+  let itemsPerPage = 5;
+
+  function badgeClasses(tone) {
+    if (tone === 'danger') return 'bg-red-500/10 text-red-300 border border-red-500/20';
+    if (tone === 'warning') return 'bg-amber-500/10 text-amber-300 border border-amber-500/20';
+    if (tone === 'success') return 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20';
+    if (tone === 'info') return 'bg-sky-500/10 text-sky-300 border border-sky-500/20';
+    return 'bg-white/5 text-slate-300 border border-white/10';
+  }
+
+  function getFilteredItems() {
+    const source = [...(itemsByTab[activeTab] || [])];
+    const term = (searchEl?.value || '').toLowerCase().trim();
+    const sortMode = sortEl?.value || 'recent';
+
+    let items = source.filter((item) => {
+      return [item.title, item.subtitle, item.meta, item.badge]
+        .join(' ')
+        .toLowerCase()
+        .includes(term);
+    });
+
+    if (sortMode === 'az') {
+      items.sort((a, b) => a.title.localeCompare(b.title));
+    } else {
+      items.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+    }
+
+    return items;
+  }
+
+  function renderList() {
+    const items = getFilteredItems();
+
+    if (!listEl || !totalEl || !pageEl) return;
+
+    const totalPages = Math.max(1, Math.ceil(items.length / itemsPerPage));
+
+    if (currentPage > totalPages) {
+      currentPage = totalPages;
+    }
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const paginatedItems = items.slice(start, end);
+
+    totalEl.textContent = `Total ${items.length}`;
+    pageEl.textContent = String(currentPage);
+
+    if (prevBtn) prevBtn.disabled = currentPage === 1;
+    if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+
+    if (!paginatedItems.length) {
+      listEl.innerHTML = `
+        <div class="rounded-[14px] border border-white/10 bg-white/[0.02] px-4 py-6 text-sm text-slate-400">
+          No se encontraron resultados para esta categoría.
+        </div>
+      `;
+      return;
+    }
+
+    listEl.innerHTML = paginatedItems.map((item) => `
+      <article class="rounded-[12px] border border-white/10 bg-white/[0.03] px-4 py-4 transition hover:border-white/20 hover:bg-white/[0.045]">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div class="min-w-0">
+            <h3 class="truncate text-[17px] font-medium leading-tight text-white">
+              ${item.title}
+            </h3>
+            <p class="mt-1 text-sm text-slate-400">
+              ${item.subtitle} | ${item.meta}
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3 self-start sm:self-center">
+            <span class="inline-flex rounded-full px-3 py-1 text-sm ${badgeClasses(item.badgeTone)}">
+              ${item.badge}
+            </span>
+
+            <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-[8px] border border-white/10 text-slate-400 transition hover:bg-white/5 hover:text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                <path d="M12 6.75a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM12 13.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM12 20.25a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  function setActiveTab(tabId) {
+    activeTab = tabId;
+    currentPage = 1;
+
+    tabButtons.forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.tab === tabId);
+    });
+
+    renderList();
+  }
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      setActiveTab(btn.dataset.tab);
+    });
+  });
+
+  searchEl?.addEventListener('input', () => {
+    currentPage = 1;
+    renderList();
+  });
+
+  sortEl?.addEventListener('change', () => {
+    currentPage = 1;
+    renderList();
+  });
+
+  perPageEl?.addEventListener('change', (e) => {
+    itemsPerPage = Number(e.target.value);
+    currentPage = 1;
+    renderList();
+  });
+
+  prevBtn?.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderList();
+    }
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    const totalItems = getFilteredItems().length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderList();
+    }
+  });
+
+  setActiveTab(activeTab);
+</script>
+
+<style>
+  .panel-tab {
+    position: relative;
+    padding-bottom: 0.7rem;
+    font-size: 1.05rem;
+    color: rgb(226 232 240 / 0.85);
+    transition: color 0.25s ease;
+  }
+
+  .panel-tab:hover {
+    color: white;
+  }
+
+  .panel-tab::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: #00d3f3;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
+  .panel-tab.active {
+    font-weight: bold;
+    color: #68ebff;
+  }
+
+  .panel-tab.active::after {
+    transform: scaleX(1);
+  }
+
+  #panel-prev:disabled,
+  #panel-next:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+</style>

@@ -1,0 +1,65 @@
+---
+import Laberinto from '../assets/laberinto.svg';
+---
+
+<section id="problemas" class="section-container py-8 sm:py-12 lg:py-16">
+  <div class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[rgba(8,18,34,0.45)] px-6 py-10 shadow-[0_10px_40px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:px-10 sm:py-12 lg:px-16 lg:py-14">
+    <!-- brillos decorativos: sin cambios -->
+    <div class="pointer-events-none absolute inset-0">
+      <div class="absolute -left-10 top-10 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl"></div>
+      <div class="absolute right-10 top-16 h-44 w-44 rounded-full bg-blue-500/10 blur-3xl"></div>
+      <div class="absolute bottom-0 left-1/3 h-36 w-36 rounded-full bg-sky-400/10 blur-3xl"></div>
+    </div>
+
+    <!-- capa de brillo interno -->
+    <div class="pointer-events-none absolute inset-0 rounded-[2rem] ring-1 ring-white/5"></div>
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/10"></div>
+
+    <div class="relative z-10 grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+      <!-- Texto -->
+      <div class="max-w-[560px]">
+        <h2 class="max-w-[520px] text-3xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-6xl">
+          ¿Cuánto te cuesta decidir sin datos?
+        </h2>
+
+        <p class="mt-5 max-w-[500px] text-base leading-relaxed text-slate-200 sm:text-lg">
+          Muchas plantas siguen trabajando con planillas manuales, datos incompletos o información
+          atrasada. Eso significa más paradas, más scrap y menos control sobre lo que pasa día a día.
+        </p>
+      </div>
+
+      <!-- Imagen: FIX max-w-[280px] en mobile para que no aplaste el layout en pantallas angostas -->
+      <div class="flex justify-center lg:justify-end">
+        <img
+          src="/laberinto.svg"
+          alt="Ilustración de problema de información y decisión"
+          class="h-auto w-full max-w-[280px] object-contain sm:max-w-sm lg:max-w-full"
+        />
+      </div>
+    </div>
+
+    <!-- Cards inferiores: sin cambios en el grid; mt-10 es correcto -->
+    <div class="relative z-10 mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div class="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.16)]">
+        <h3 class="text-lg font-semibold text-white">Datos dispersos</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-300">
+          Información en papeles, pizarras, Excel y sistemas que no hablan entre sí.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.16)]">
+        <h3 class="text-lg font-semibold text-white">Tiempo perdido</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-300">
+          Horas de carga manual que podrían usarse en mejorar el proceso.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.16)]">
+        <h3 class="text-lg font-semibold text-white">Sin historial</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-300">
+          Cuando aparece un problema, no hay registros para entender qué pasó antes.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,21 @@
+---
+import Red from '../assets/red.svg';
+---
+
+<section id="funciona" class="section-container py-12 lg:py-16 scroll-mt-28">
+  <div class="mb-8">
+    <!-- FIX: text-3xl → sm:text-6xl saltaba de 30px a 60px. Se agrega text-4xl md:text-5xl como escalones intermedios -->
+    <h2 class="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">Cómo funciona?</h2>
+    <!-- FIX: text-2xl hardcodeado en todos los breakpoints → texto grande en mobile -->
+    <p class="mt-2 text-base text-slate-300 sm:text-xl lg:text-2xl">Una arquitectura simple y escalable.</p>
+  </div>
+
+  <!-- La imagen SVG es intrínsecamente escalable; max-w-full evita overflow -->
+  <div class="flex justify-center">
+    <img
+      src="/red.svg"
+      alt="Diagrama de red"
+      class="h-auto w-full max-w-full object-contain"
+    />
+  </div>
+</section>

@@ -1,0 +1,669 @@
+---
+import { Image } from 'astro:assets';
+import maquina from '../assets/maquina.png';
+import ListadosPanel from '../components/ListadoPanel.astro';
+
+const data = {
+  cajasContadas: '029',
+  velocidadCinta: '1.0 m/s',
+  cajasMin: '40',
+  ultimaCajaHora: '09:00:20',
+  proyeccionHora: '2400',
+  cajaSensor: '---',
+  codigoCaja: 'CX-0006',
+  lote: 'L01',
+  peso: '13.30 kg',
+  fechaHora: '26/12/2025 09:22:48',
+  tagSensor: 'True',
+};
+
+const alarms = [
+  {
+    time: '10:21',
+    title: 'Alta temperatura tanque L1',
+    desc: 'Superó el umbral configurado y requiere revisión.',
+    tone: 'critical',
+    badge: 'Crítica',
+  },
+  {
+    time: '09:58',
+    title: 'Baja velocidad motor L2',
+    desc: 'La línea quedó por debajo del valor esperado.',
+    tone: 'warning',
+    badge: 'Advertencia',
+  },
+  {
+    time: '09:35',
+    title: 'Falla sensor presión L1',
+    desc: 'Se detectó pérdida de lectura intermitente.',
+    tone: 'info',
+    badge: 'Info',
+  },
+];
+
+function toneStyles(tone: string) {
+  if (tone === 'critical') {
+    return {
+      bar: 'bg-red-500',
+      badge: 'bg-red-100 text-red-500',
+    };
+  }
+
+  if (tone === 'warning') {
+    return {
+      bar: 'bg-amber-500',
+      badge: 'bg-amber-100 text-amber-600',
+    };
+  }
+
+  return {
+    bar: 'bg-sky-500',
+    badge: 'bg-sky-100 text-sky-600',
+  };
+}
+---
+
+<section id="monitoreo" class="monitoreo-section monitoreo-reveal relative overflow-hidden pb-16 scroll-mt-28">
+  <div class="monitoreo-grid-top"></div>
+
+  <!-- FIX: lg:px-46 no existe en Tailwind → reemplazado por lg:px-16 (valor válido) -->
+  <div class="relative z-10 px-6 py-12 sm:px-10 lg:px-16 lg:py-16">
+    <div class="mx-auto max-w-4xl text-center">
+      <h2 class="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-6xl">
+        Todo lo que pasa en tu planta, en una sola plataforma
+      </h2>
+      <p class="mt-4 text-sm text-slate-300 sm:text-base lg:text-xl">
+        Diseñamos soluciones a medida para visualizar variables críticas, registrar históricos, gestionar alarmas y mejorar la trazabilidad de tus procesos
+      </p>
+    </div>
+
+    <div class="mt-12 grid items-center gap-8 lg:grid-cols-[.9fr_1.1fr]">
+      <div class="order-2 lg:order-1">
+        <Image
+          src={maquina}
+          alt="Monitoreo de máquina industrial"
+          class="mx-auto h-auto w-full max-w-[760px] object-contain"
+        />
+      </div>
+
+      <!-- FIX: grid de 2 col pasa a lg para evitar aplastamiento en tablet (< 1024px) -->
+      <div class="order-1 grid gap-4 lg:order-2 lg:grid-cols-2">
+        <div class="mx-auto w-full max-w-[860px] rounded-[20px] border border-white/25 bg-[#05070b]/90 px-6 py-6 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.03)_inset] backdrop-blur-[2px]">
+          <div class="flex items-center gap-4">
+            <span class="relative inline-flex h-5 w-5 shrink-0 rounded-full bg-lime-400">
+              <span class="absolute inset-0 rounded-full bg-lime-400 opacity-90 blur-[10px]"></span>
+            </span>
+
+            <h2 class="text-base font-semibold leading-none tracking-tight sm:text-[18px]">
+              Dashboard de conteo y trazabilidad
+            </h2>
+          </div>
+
+          <div class="mt-1 text-center">
+            <p class="text-lg text-zinc-200 sm:text-[22px]">Cajas contadas:</p>
+            <!-- FIX: text-[86px] sin breakpoint → aplastaba en mobile. Ahora escala progresiva -->
+            <div class="mt-1 text-[56px] font-semibold leading-none tracking-tight text-cyan-400 sm:text-[70px] lg:text-[86px]">
+              {data.cajasContadas}
+            </div>
+          </div>
+
+          <div class="mx-auto mt-1 grid max-w-[600px] gap-4 sm:grid-cols-2">
+            <div class="h-[30px] rounded-[4px] border border-white/30 px-3 py-2 text-[10px] leading-none text-zinc-100">
+              Velocidad cinta: {data.velocidadCinta}
+            </div>
+
+            <div class="h-[30px] rounded-[4px] border border-white/30 px-3 py-2 text-[10px] leading-none text-zinc-100">
+              Cajas/min (Simulando): {data.cajasMin}
+            </div>
+
+            <div class="h-[30px] rounded-[4px] border border-white/30 px-3 py-2 text-[10px] leading-none text-zinc-100">
+              Ultima caja: {data.ultimaCajaHora}
+            </div>
+
+            <div class="h-[30px] rounded-[4px] border border-white/30 px-3 py-2 text-[10px] leading-none text-zinc-100">
+              Proyeccion hora: {data.proyeccionHora}
+            </div>
+          </div>
+
+          <div class="mx-auto mt-3 max-w-[670px] space-y-3 text-[13px] text-zinc-200">
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <span class="text-zinc-200">Caja bajo el sensor (TAG TRUE):</span>
+              <span class="rounded-[4px] border border-cyan-400 px-3 py-1 leading-none text-zinc-100">
+                {data.cajaSensor}
+              </span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <span>Última caja contada:</span>
+              <span class="rounded-[4px] border border-cyan-400 px-2 py-1 leading-none text-zinc-100">
+                {data.codigoCaja}
+              </span>
+              <span>Lote:<strong class="ml-1 font-semibold text-zinc-100">{data.lote}</strong></span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <span>Peso última caja:</span>
+              <span class="rounded-[4px] border border-cyan-400 px-2 py-1 leading-none text-zinc-100">
+                {data.peso}
+              </span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <span>Fecha/hora registro:</span>
+              <span class="rounded-[4px] border border-cyan-400 px-2 py-1 leading-none text-zinc-100 [font-variant-numeric:tabular-nums]">
+                {data.fechaHora}
+              </span>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-end gap-x-3 gap-y-2 pt-2">
+              <span>TAG sensor (SENSOR_CAJA):</span>
+              <span class="rounded-[4px] border border-cyan-400 px-3 py-1 leading-none text-zinc-100">
+                {data.tagSensor}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="alarm-card-wrapper h-fit self-start rounded-[22px] border border-slate-200 bg-[#f5f7fb] p-5 text-slate-900 shadow-sm">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h3 class="text-[18px] font-semibold leading-none">Últimas alarmas</h3>
+              <p class="mt-2 text-[15px] text-slate-400">
+                Eventos recientes que requieren atención.
+              </p>
+            </div>
+
+            <span class="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-sm font-medium text-orange-600">
+              <span class="h-2.5 w-2.5 rounded-full bg-orange-500"></span>
+              5 eventos recientes
+            </span>
+          </div>
+
+          <div class="mt-5 space-y-4">
+            {alarms.map((alarm, index) => {
+              const styles = toneStyles(alarm.tone);
+
+              return (
+                <div
+                  class="alarm-row relative overflow-hidden rounded-[18px] border border-slate-200 bg-[#f8fafc]"
+                  style={`animation-delay: ${index * 0.45}s;`}
+                >
+                  <div class:list={['absolute left-0 top-0 h-full w-1.5', styles.bar]}></div>
+
+                  <div class="grid gap-3 px-4 py-3 sm:grid-cols-[72px_1fr_auto] sm:items-center">
+                    <div class="inline-flex h-[40px] items-center justify-center rounded-[14px] border border-slate-200 bg-slate-100 px-3 text-sm font-semibold text-slate-700">
+                      {alarm.time}
+                    </div>
+
+                    <div class="min-w-0">
+                      <p class="text-[10px] font-semibold leading-tight text-slate-800">
+                        {alarm.title}
+                      </p>
+                      <p class="mt-1 text-[10px] leading-relaxed text-slate-500">
+                        {alarm.desc}
+                      </p>
+                    </div>
+
+                    <div class="sm:justify-self-end">
+                      <span class:list={['inline-flex rounded-full px-3 py-1 text-[10px] font-medium', styles.badge]}>
+                        {alarm.badge}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div class="mt-5 flex flex-wrap items-center justify-between gap-3 text-[11px]">
+            <p class="text-slate-400">Última sincronización: hace 3 s</p>
+
+            <a
+              href="#"
+              class="font-semibold text-blue-600 transition hover:text-blue-700"
+            >
+              Ir a gestión de alarmas
+            </a>
+          </div>
+        </div>
+
+        <!-- FIX: lg:col-span-2 (antes sm:col-span-2, alineado al nuevo grid lg:grid-cols-2) -->
+        <div class="rounded-[20px] border border-white/25 bg-[#05070b]/90 px-8 py-10 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.03)_inset] backdrop-blur-[2px] lg:col-span-2">
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p class="text-sm font-semibold text-white sm:text-3xl">Producción Línea 1</p>
+              <p class="mt-1 text-xs text-slate-400 sm:text-xl">
+                Producción diaria de la línea.
+              </p>
+            </div>
+
+            <div class="flex items-center gap-2 text-xs">
+              <span class="rounded-full bg-blue-500/10 px-2 py-2 text-blue-300">PLC 1</span>
+              <span class="rounded-full bg-cyan-500/10 px-2 py-2 text-cyan-300">Gráfico</span>
+
+              <div class="flex justify-end">
+                <div class="flex items-center rounded-full bg-emerald-500/10 px-3 py-2 text-sm font-medium text-emerald-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                  </svg>
+                  <span>Descargar reporte</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                id="openChartModal"
+                class="rounded-full border border-white/10 px-3 py-2 text-slate-300 transition hover:bg-white/5"
+              >
+                Ver ampliado
+              </button>
+            </div>
+          </div>
+
+          <div class="rounded-[1.4rem] border border-white/5 bg-[#050505] px-3 py-3 sm:px-4 sm:py-4">
+            <div class="h-[250px] w-full">
+              <canvas id="chartProduccionLanding" class="h-full w-full"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="chartModal" class="chart-modal-landing hidden">
+    <div class="chart-modal-backdrop"></div>
+
+    <div class="chart-modal-panel">
+      <div class="flex items-start justify-between gap-4 border-b border-white/10 px-5 py-4">
+        <div>
+          <h3 class="text-lg font-semibold text-white">Producción Línea 1</h3>
+          <p class="mt-1 text-sm text-slate-400">
+            Vista ampliada del gráfico de producción.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          id="closeChartModal"
+          class="rounded-full border border-white/10 px-3 py-1 text-slate-300 transition hover:bg-white/5"
+        >
+          Cerrar
+        </button>
+      </div>
+
+      <div class="p-5">
+        <div class="rounded-[1.4rem] border border-white/5 bg-[rgba(255,255,255,0.02)] p-4">
+          <div class="h-[380px] w-full">
+            <canvas id="chartProduccionModal" class="h-full w-full"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ListadosPanel />
+</section>
+
+<script is:inline>
+  function formatValue(v, mode) {
+    if (mode === 'k') {
+      if (Math.abs(v) >= 1000) return (v / 1000).toFixed(1).replace('.0', '') + 'k';
+      return String(Math.round(v));
+    }
+    return String(Math.round(v));
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function createInteractiveChart(canvasId, config) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const state = { hoverIndex: null };
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.max(10, Math.floor(rect.width));
+      canvas.height = Math.max(10, Math.floor(rect.height));
+    }
+
+    function draw() {
+      resize();
+
+      const w = canvas.width;
+      const h = canvas.height;
+      const padL = 48;
+      const padR = 18;
+      const padT = 18;
+      const padB = 34;
+
+      const data = config.data;
+      const labels = config.labels;
+
+      let min = Math.min(...data);
+      let max = Math.max(...data);
+      if (max === min) max = min + 1;
+
+      const range = max - min;
+      const yPad = range * 0.18;
+      const yMin = min - yPad;
+      const yMax = max + yPad;
+      const yRange = yMax - yMin;
+
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.fillStyle = '#050505';
+      ctx.fillRect(0, 0, w, h);
+
+      const gridLines = 4;
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.lineWidth = 1;
+
+      for (let i = 0; i <= gridLines; i++) {
+        const y = padT + (h - padT - padB) * (i / gridLines);
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(w - padR, y);
+        ctx.stroke();
+      }
+
+      const xAxisY = h - padB;
+      ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(padL, xAxisY);
+      ctx.lineTo(w - padR, xAxisY);
+      ctx.stroke();
+
+      ctx.font = '11px Segoe UI';
+      ctx.fillStyle = 'rgba(226,232,240,0.72)';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+
+      for (let i = 0; i <= gridLines; i++) {
+        const v = yMax - yRange * (i / gridLines);
+        const y = padT + (h - padT - padB) * (i / gridLines);
+        ctx.fillText(formatValue(v, config.yFormat), padL - 10, y);
+      }
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillStyle = 'rgba(226,232,240,0.72)';
+
+      for (let i = 0; i < labels.length; i++) {
+        const x = padL + (w - padL - padR) * (i / (labels.length - 1 || 1));
+        ctx.fillText(labels[i], x, h - 10);
+      }
+
+      function xFor(i) {
+        return padL + (w - padL - padR) * (i / (data.length - 1 || 1));
+      }
+
+      function yFor(v) {
+        const norm = (v - yMin) / yRange;
+        return padT + (1 - norm) * (h - padT - padB);
+      }
+
+      const gradient = ctx.createLinearGradient(0, padT, 0, xAxisY);
+      gradient.addColorStop(0, 'rgba(25,194,255,0.22)');
+      gradient.addColorStop(1, 'rgba(25,194,255,0.02)');
+
+      ctx.beginPath();
+      data.forEach((v, i) => {
+        const x = xFor(i);
+        const y = yFor(v);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.lineTo(xFor(data.length - 1), xAxisY);
+      ctx.lineTo(xFor(0), xAxisY);
+      ctx.closePath();
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      ctx.beginPath();
+      data.forEach((v, i) => {
+        const x = xFor(i);
+        const y = yFor(v);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = config.color;
+      ctx.lineWidth = 3;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      data.forEach((v, i) => {
+        const x = xFor(i);
+        const y = yFor(v);
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = config.color;
+        ctx.fill();
+      });
+    }
+
+    window.addEventListener('resize', draw);
+    draw();
+  }
+
+  createInteractiveChart('chartProduccionLanding', {
+    data: [4.2, 4.8, 5.4, 5.1, 6.0, 6.7, 7.2],
+    labels: ['Oct', 'Nov', 'Dic', 'Ene', 'Feb', 'Mar', 'Anual'],
+    color: '#19c2ff',
+    yFormat: 'int',
+    unit: 'tn'
+  });
+
+  createInteractiveChart('chartProduccionModal', {
+    data: [4.2, 4.8, 5.4, 5.1, 6.0, 6.7, 7.2],
+    labels: ['Oct', 'Nov', 'Dic', 'Ene', 'Feb', 'Mar', 'Anual'],
+    color: '#19c2ff',
+    yFormat: 'int',
+    unit: 'tn'
+  });
+
+  const openBtn = document.getElementById('openChartModal');
+  const closeBtn = document.getElementById('closeChartModal');
+  const modal = document.getElementById('chartModal');
+
+  function openModal() {
+    modal?.classList.remove('hidden');
+    modal?.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal?.classList.add('hidden');
+    modal?.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  openBtn?.addEventListener('click', openModal);
+  closeBtn?.addEventListener('click', closeModal);
+
+  modal?.addEventListener('click', (e) => {
+    if (e.target.classList.contains('chart-modal-backdrop')) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+
+  // animación progresiva del redondeado superior según scroll
+  const monitoreoSection = document.getElementById('monitoreo');
+
+  if (monitoreoSection) {
+    let ticking = false;
+    let currentProgress = 0;
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function easeOutCubic(x) {
+      return 1 - Math.pow(1 - x, 3);
+    }
+
+    function updateRadius() {
+      ticking = false;
+
+      const rect = monitoreoSection.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      const start = viewportHeight * 0.95;
+      const end = viewportHeight * 0.05;
+
+      const rawProgress = (start - rect.top) / (start - end);
+      const clampedProgress = clamp(rawProgress, 0, 1);
+      const targetProgress = easeOutCubic(clampedProgress);
+
+      currentProgress += (targetProgress - currentProgress) * 0.14;
+
+      if (Math.abs(targetProgress - currentProgress) < 0.001) {
+        currentProgress = targetProgress;
+      }
+
+      monitoreoSection.style.setProperty(
+        '--radius-progress',
+        currentProgress.toFixed(4)
+      );
+    }
+
+    function requestUpdate() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateRadius);
+      }
+    }
+
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+
+    requestUpdate();
+  }
+</script>
+
+<style>
+  .monitoreo-reveal {
+    --radius-progress: 0;
+    --max-radius: 10rem;
+    border-top-left-radius: calc(var(--max-radius) * var(--radius-progress));
+    border-top-right-radius: calc(var(--max-radius) * var(--radius-progress));
+    will-change: border-top-left-radius, border-top-right-radius;
+  }
+
+  @media (max-width: 640px) {
+    .monitoreo-reveal {
+      --max-radius: 4rem;
+    }
+  }
+
+  .monitoreo-section {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at top left, rgba(34, 211, 238, 0.045), transparent 28%),
+      radial-gradient(circle at bottom right, rgba(132, 204, 22, 0.025), transparent 26%),
+      #05070b;
+  }
+
+  .monitoreo-grid-top {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 30%;
+    pointer-events: none;
+    z-index: 0;
+
+    background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: 32px 32px;
+
+    clip-path: ellipse(85% 100% at 50% 0%);
+    background-position: 0 0, 0 0;
+
+    -webkit-mask-image: radial-gradient(
+      160% 115% at 50% 0%,
+      black 0%,
+      black 52%,
+      rgba(0, 0, 0, 0.85) 64%,
+      rgba(0, 0, 0, 0.35) 76%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      160% 115% at 50% 0%,
+      black 0%,
+      black 52%,
+      rgba(0, 0, 0, 0.85) 64%,
+      rgba(0, 0, 0, 0.35) 76%,
+      transparent 100%
+    );
+  }
+
+  .chart-modal-landing {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    padding: 1.2rem;
+  }
+
+  .chart-modal-landing.is-open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chart-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+  }
+
+  .chart-modal-panel {
+    position: relative;
+    z-index: 1;
+    width: min(960px, 100%);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.6rem;
+    background: linear-gradient(180deg, rgba(4, 18, 40, 0.98) 0%, rgba(3, 15, 32, 0.98) 100%);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  }
+
+  .alarm-card-wrapper {
+    width: 100%;
+  }
+
+  .alarm-row {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: alarmReveal 0.55s ease forwards;
+  }
+
+  @keyframes alarmReveal {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

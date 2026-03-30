@@ -1,0 +1,228 @@
+---
+import { Image } from 'astro:assets';
+import CPU from '../assets/cpu.png';
+import Notifi from '../assets/notificaciones.png';
+import Web from '../assets/web.png';
+import Bdd from '../assets/bbd.png';
+
+const cards = [
+  {
+    title: 'Lectura automática de variables de proceso y producción en tiempo real',
+    image: CPU,
+    alt: 'Lectura automática de variables',
+  },
+  {
+    title: 'Almacenamiento seguro de información en base de datos local o en la nube',
+    image: Bdd,
+    alt: 'Base de datos local o nube',
+  },
+  {
+    title: 'Dashboards web interactivos y reportes personalizados para cada operación',
+    image: Web,
+    alt: 'Dashboards web y reportes',
+  },
+  {
+    title: 'Alarmas y notificaciones automáticas ante fallas, desvíos o eventos críticos',
+    image: Notifi,
+    alt: 'Alarmas y notificaciones',
+  },
+];
+---
+
+<section id="que-hacemos" class="section-container py-12 lg:py-16">
+  <div class="grid items-start gap-12 lg:grid-cols-[minmax(320px,480px)_minmax(420px,560px)] lg:justify-start">
+    <!-- Texto izquierdo: sin cambios (se ve bien en mobile como columna) -->
+    <div class="max-w-md">
+      <!-- FIX: text-5xl → text-4xl base para mejor legibilidad en mobile. sm:text-5xl lg:text-7xl conserva la escala desktop. -->
+      <h2 class="text-4xl font-bold leading-[0.95] text-white sm:text-5xl lg:text-7xl">
+        ¿Qué
+        <br />
+        hacemos?
+      </h2>
+
+      <p class="mt-6 max-w-sm text-lg leading-relaxed text-zinc-300">
+        Diseñamos e implementamos sistemas de data logging que se conectan a tus PLC,
+        sensores y equipos industriales para registrar las variables clave de tu proceso.
+      </p>
+    </div>
+
+    <!-- Carrusel derecho -->
+    <div class="mini-carousel w-full max-w-[560px]" data-mini-carousel>
+      <div class="mini-viewport relative overflow-hidden rounded-[20px]">
+        <div
+          class="mini-track flex flex-col gap-5 transition-transform duration-700 ease-out"
+          data-track
+        >
+          {cards.map((card, index) => (
+            <article
+              class="mini-card flex flex-col justify-between rounded-[20px] border border-white/5 bg-[#07111c] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.30)]"
+              data-slide={index}
+              {/* FIX: h-[250px] fijo → min-h-[220px] h-auto en mobile / h-[250px] fijo solo en sm+ */}
+              style="min-height: 220px;"
+            >
+              <div class="flex">
+                <Image
+                  src={card.image}
+                  alt={card.alt}
+                  width={106}
+                  height={106}
+                  class="h-[80px] w-[80px] object-contain opacity-95 sm:h-[106px] sm:w-[106px]"
+                />
+              </div>
+
+              <p class="mt-4 text-lg font-semibold leading-snug text-zinc-100 sm:text-xl">
+                {card.title}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div class="mt-5 flex items-center justify-center gap-3">
+        <button
+          type="button"
+          class="flex h-11 w-11 items-center justify-center rounded-full bg-white/8 text-white transition hover:bg-white/15"
+          data-prev
+          aria-label="Anterior"
+        >
+          ↑
+        </button>
+
+        <div class="flex items-center gap-2">
+          {cards.map((_, index) => (
+            <button
+              type="button"
+              class="mini-dot h-2.5 w-2.5 rounded-full bg-white/30 transition-all duration-300"
+              data-dot={index}
+              aria-label={`Ir a la tarjeta ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        <button
+          type="button"
+          class="flex h-11 w-11 items-center justify-center rounded-full bg-white/8 text-white transition hover:bg-white/15"
+          data-next
+          aria-label="Siguiente"
+        >
+          ↓
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const carousels = document.querySelectorAll('[data-mini-carousel]');
+
+  carousels.forEach((root) => {
+    const track = root.querySelector('[data-track]');
+    const slides = Array.from(root.querySelectorAll('[data-slide]'));
+    const dots = Array.from(root.querySelectorAll('[data-dot]'));
+    const prevBtn = root.querySelector('[data-prev]');
+    const nextBtn = root.querySelector('[data-next]');
+    const viewport = root.querySelector('.mini-viewport');
+
+    if (!track || !slides.length || !viewport) return;
+
+    let current = 0;
+    let timer = null;
+    const autoplayMs = 3500;
+
+    function getGap() {
+      const styles = window.getComputedStyle(track);
+      return parseFloat(styles.rowGap || styles.gap || 0);
+    }
+
+    function getStep() {
+      return slides[0].offsetHeight + getGap();
+    }
+
+    function setViewportHeight() {
+      const firstCardHeight = slides[0].offsetHeight;
+      viewport.style.height = `${firstCardHeight}px`;
+    }
+
+    function updateDots() {
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('bg-white', i === current);
+        dot.classList.toggle('w-8', i === current);
+        dot.classList.toggle('bg-white/30', i !== current);
+      });
+    }
+
+    function updatePosition(animate = true) {
+      const offset = current * getStep();
+
+      if (!animate) {
+        track.style.transition = 'none';
+      } else {
+        track.style.transition = '';
+      }
+
+      track.style.transform = `translateY(-${offset}px)`;
+      updateDots();
+
+      if (!animate) {
+        requestAnimationFrame(() => {
+          track.style.transition = '';
+        });
+      }
+    }
+
+    function goTo(index) {
+      current = (index + slides.length) % slides.length;
+      updatePosition(true);
+      restartAutoplay();
+    }
+
+    function next() {
+      goTo(current + 1);
+    }
+
+    function prev() {
+      goTo(current - 1);
+    }
+
+    function startAutoplay() {
+      stopAutoplay();
+      timer = setInterval(() => {
+        current = (current + 1) % slides.length;
+        updatePosition(true);
+      }, autoplayMs);
+    }
+
+    function stopAutoplay() {
+      if (timer) clearInterval(timer);
+    }
+
+    function restartAutoplay() {
+      startAutoplay();
+    }
+
+    prevBtn?.addEventListener('click', prev);
+    nextBtn?.addEventListener('click', next);
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => goTo(i));
+    });
+
+    root.addEventListener('mouseenter', stopAutoplay);
+    root.addEventListener('mouseleave', startAutoplay);
+
+    window.addEventListener('resize', () => {
+      setViewportHeight();
+      updatePosition(false);
+    });
+
+    setViewportHeight();
+    updatePosition(false);
+    startAutoplay();
+  });
+</script>
+
+<style>
+  .mini-dot {
+    transition: all 0.28s ease;
+  }
+</style>
